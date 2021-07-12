@@ -84,10 +84,13 @@ class CreateNoteViewModel @Inject constructor(
     }
 
     fun setCurImageUri(uri : Uri?) {
-        viewModelScope.launch(dispatcher) {
-            _curImageUri.postValue(uri)
+        uri?.let {uri->
+            viewModelScope.launch(dispatcher) {
+                _curImageUri.postValue(uri)
 
+            }
         }
+
     }
 
     fun getTimeAndData() {
