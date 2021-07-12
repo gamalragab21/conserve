@@ -66,22 +66,21 @@ class CreateNoteViewModel @Inject constructor(
 
 
     fun setWebLink(url : Resource.Success<String> , dialoge : Dialog?) {
-
-        if (url.data !!.toString().trim().isEmpty()) {
-            val error = context.getString(R.string.web_link_empty)
-            _webLinkStatus.postValue(Event(Resource.Error(error)))
-        } else if (! Patterns.WEB_URL.matcher(url.data.toString()).matches()) {
-            val error = context.getString(R.string.invalid_web_link)
-            _webLinkStatus.postValue(Event(Resource.Error(error)))
-
-        } else {
-            _webLinkStatus.postValue(Event(Resource.Loading()))
-            viewModelScope.launch (dispatcher){
-                _webLinkStatus.postValue(Event(url))
-            }
-            dialoge?.dismiss()
-        }
-
+          url.data?.let {
+              if (url.data.trim().isEmpty()) {
+                  val error = context.getString(R.string.web_link_empty)
+                  _webLinkStatus.postValue(Event(Resource.Error(error)))
+              } else if (! Patterns.WEB_URL.matcher(url.data.toString()).matches()) {
+                  val error = context.getString(R.string.invalid_web_link)
+                  _webLinkStatus.postValue(Event(Resource.Error(error)))
+              } else {
+                  _webLinkStatus.postValue(Event(Resource.Loading()))
+                  viewModelScope.launch(dispatcher) {
+                      _webLinkStatus.postValue(Event(url))
+                  }
+                  dialoge?.dismiss()
+              }
+          }
     }
 
     fun setCurImageUri(uri : Uri?) {
@@ -152,8 +151,8 @@ class CreateNoteViewModel @Inject constructor(
                         subTitle = inputSubtitle?.text.toString() ,
                         color = colorIndicatorStatus.value?.peekContent()?.data.toString() ,
                         // imagePath = curImageUri.value?.peekContent()?.data.toString()
-                        imagePath = curImageUri.value?.toString()?:"" ,
-                        webLink = webLinkStatus.value?.peekContent()?.data?:"",
+                        imagePath = curImageUri.value?.toString() ,
+                        webLink = webLinkStatus.value?.peekContent()?.data,
                         note_text = input_note.text.toString()
                     )
 

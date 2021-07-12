@@ -19,13 +19,13 @@ class Note(
     @ColumnInfo(name = "subtitle")
     val subTitle:String,
     @ColumnInfo(name = "image_path")
-    val imagePath:String="",
+    val imagePath:String?=null,
     @ColumnInfo(name = "note_text")
     var note_text: String? = null,
     @ColumnInfo(name = "color")
-    val color:String="",
+    val color:String?=null,
     @ColumnInfo(name = "weblink")
-    val webLink:String=""
+    val webLink:String?=null
 ):Parcelable{
     override fun toString() : String {
         return "Note(id=$id, title='$title', dateTime='$dateTime', subTitle='$subTitle', imagePath=$imagePath, color=$color, webLink=$webLink)"

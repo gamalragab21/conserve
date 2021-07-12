@@ -77,10 +77,17 @@ class CreateNoteFragment : Fragment(R.layout.fragment_create_note) {
       //     glide.load(note?.imagePath).into(imageNote)
           // textUrl.text = note?.webLink
            setNoteColorIndicator()
-           createNoteViewModel.setWebLink(Resource.Success(note?.webLink.toString()),null)
-           createNoteViewModel.setCurImageUri(Uri.parse(note?.imagePath))
-           selecteColorNote = note?.color.toString()
-           createNoteViewModel.setColorIndicatorStatus(selecteColorNote)
+           noteUpdate.webLink?.let {url->
+               createNoteViewModel.setWebLink(Resource.Success(url),null)
+           }
+           noteUpdate.imagePath?.let {uri->
+               createNoteViewModel.setCurImageUri(Uri.parse(uri))
+           }
+
+           noteUpdate.color?.let {color->
+                selecteColorNote=color
+            //    createNoteViewModel.setColorIndicatorStatus(selecteColorNote)
+            }
        }
 
         // foundations

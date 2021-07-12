@@ -66,8 +66,11 @@ class NoteAdapter @Inject constructor(
             subtitleNote.text = note.subTitle
             textDataTimeNote.text = note.dateTime
 
-            if (note.webLink.isNotEmpty()) urlItem.text=note.webLink
-            else urlItem.isVisible=true
+
+                note.webLink?.let {uri->
+                    urlItem.text=uri
+                }
+
 
             itemView.setOnClickListener {
                 onNoteClickListener?.let { click ->
@@ -91,11 +94,11 @@ class NoteAdapter @Inject constructor(
                     subtitleNote.setTextColor(Color.parseColor("#FFFFFF"))
                     textDataTimeNote.setTextColor(Color.parseColor("#FFFFFF"))
                 }
-                try {
+              //  try {
                     cardNote.setCardBackgroundColor(Color.parseColor(color))
-                } catch (e : Exception) {
-                    cardNote.setCardBackgroundColor(Color.parseColor("#333333"))
-                }
+//                } catch (e : Exception) {
+//                    cardNote.setCardBackgroundColor(Color.parseColor("#333333"))
+//                }
 
             }
 
