@@ -57,7 +57,7 @@ class HomeFragment :Fragment(R.layout.home_fragment) {
         super.onViewCreated(view , savedInstanceState)
 
         add_note_main.setOnClickListener {
-             clear()
+
             val action =HomeFragmentDirections.actionHomeFragmentToCreateNoteFragment()
             findNavController().navigate(action)
         }
@@ -84,7 +84,7 @@ class HomeFragment :Fragment(R.layout.home_fragment) {
         }
 
         noteAdapter.setOnNoteClickListener {note->
-            clear()
+
            val action =HomeFragmentDirections.actionHomeFragmentToCreateNoteFragment(note)
             findNavController().navigate(action)
         }
@@ -95,18 +95,18 @@ class HomeFragment :Fragment(R.layout.home_fragment) {
     private fun quickActions() {
 
         ic_add_note.setOnClickListener {
-            clear()
+
             val action = HomeFragmentDirections.actionHomeFragmentToCreateNoteFragment()
               findNavController().navigate(action)
                  }
 
         ic_add_image.setOnClickListener {
-            clear()
+
             addImage()
         }
 
         ic_add_url_web.setOnClickListener {
-            clear()
+
             dialogAddUrl()
         }
 
@@ -122,11 +122,7 @@ class HomeFragment :Fragment(R.layout.home_fragment) {
             }
         }.show(childFragmentManager, null)
     }
-    fun clear() {
 
-        createNoteViewModel.setWebLink(Resource.Success(""),null)
-        createNoteViewModel.setCurImageUri(null)
-    }
     private fun addImage() {
         Dexter.withContext(context)
             .withPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
@@ -238,6 +234,7 @@ class HomeFragment :Fragment(R.layout.home_fragment) {
                 ic_progress_notes.isVisible = true
             }
         ) { notes ->
+
             ic_progress_notes.isVisible = false
             noteAdapter.notes = notes
 

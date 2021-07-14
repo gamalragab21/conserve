@@ -78,6 +78,7 @@ class CreateNoteFragment : Fragment(R.layout.fragment_create_note) {
           // textUrl.text = note?.webLink
            setNoteColorIndicator()
            noteUpdate.webLink?.let {url->
+               Log.i(TAG , "onViewCreated: $url")
                createNoteViewModel.setWebLink(Resource.Success(url),null)
            }
            noteUpdate.imagePath?.let {uri->

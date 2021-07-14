@@ -82,6 +82,15 @@ class CreateNoteViewModel @Inject constructor(
               }
           }
     }
+    fun setWebLink2(url : Resource.Success<String> , dialoge : Dialog?) {
+        url.data?.let {
+                _webLinkStatus.postValue(Event(Resource.Loading()))
+                viewModelScope.launch(dispatcher) {
+                    _webLinkStatus.postValue(Event(url))
+                }
+                dialoge?.dismiss()
+        }
+    }
 
     fun setCurImageUri(uri : Uri?) {
         uri?.let {uri->
@@ -255,6 +264,8 @@ class CreateNoteViewModel @Inject constructor(
         super.onCleared()
 
     }
+
+
 
 
 }
