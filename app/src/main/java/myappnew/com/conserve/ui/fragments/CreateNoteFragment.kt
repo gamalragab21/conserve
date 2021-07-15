@@ -20,6 +20,7 @@ import androidx.annotation.RequiresApi
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.RequestManager
@@ -55,7 +56,8 @@ class CreateNoteFragment : Fragment(R.layout.fragment_create_note) {
     private lateinit var bottomSheetBehavior : BottomSheetBehavior<LinearLayout>
 
     private var selecteColorNote : String = "#333333"
-    private val createNoteViewModel : CreateNoteViewModel by activityViewModels()
+
+    private val createNoteViewModel : CreateNoteViewModel by viewModels()
 
     @Inject
     lateinit var glide : RequestManager
@@ -107,9 +109,12 @@ class CreateNoteFragment : Fragment(R.layout.fragment_create_note) {
 
         ic_save.setOnClickListener {
             it.hideKeyboard()
-          if (note == null && note?.id == null) {
-                createNoteViewModel.saveNote(input_title , input_subTitle,input_note)
+            Log.i(TAG , "onViewCreated: ic_save")
+          if ( note?.id == null) {
+              Log.i(TAG , "onViewCreated:  note?.id == null")
+              createNoteViewModel.saveNote(input_title , input_subTitle,input_note)
           } else {
+              Log.i(TAG , "onViewCreated: else")
               createNoteViewModel.updateNote(note?.id,input_title , input_subTitle,input_note)
             }
 
@@ -248,7 +253,7 @@ class CreateNoteFragment : Fragment(R.layout.fragment_create_note) {
             BottomSheetBehavior.BottomSheetCallback() {
             override fun onStateChanged(bottomSheet : View , newState : Int) {
                 if (newState == BottomSheetBehavior.STATE_EXPANDED) {
-                    delete_note.isVisible = note != null
+                    delete_note.isVisible = note?.id != null
                     setNoteColorIndicator()
                     bottomSheet.hideKeyboard()
                 }

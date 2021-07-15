@@ -13,13 +13,17 @@
             android:id="@+id/action_homeFragment_to_createNoteFragment"
             app:destination="@id/createNoteFragment" />
     </fragment>
+
+
+
     <fragment
         android:id="@+id/createNoteFragment"
         android:name="myappnew.com.conserve.ui.fragments.CreateNoteFragment"
         android:label="CreateNoteFragment" >
         <action
             android:id="@+id/action_createNoteFragment_to_homeFragment"
-            app:destination="@id/homeFragment" />
+            app:destination="@id/homeFragment"
+            />
         <argument
             android:name="note"
             app:argType="myappnew.com.conserve.entiteis.Note"

@@ -67,4 +67,5 @@
     <string name="input_note_empty">Content note must be not empty</string>
     <string name="update_note">Successfully Updated Note</string>
     <string name="text_copied">Successfully Copied Note</string>
+    <string name="empty_note">No Notes</string>
 </resources>

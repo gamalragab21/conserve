@@ -22,7 +22,6 @@ import javax.inject.Inject
 class AddUrlDialogs : DialogFragment() {
 
 
-    val createNoteViewModel : CreateNoteViewModel by activityViewModels()
     private lateinit var dialogView : View
 
     private var addUrlListener: ((String,Dialog?) -> Unit)? = null

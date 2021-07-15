@@ -33,6 +33,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import myappnew.com.conserve.R
+import myappnew.com.conserve.entiteis.Note
 import myappnew.com.conserve.helper.Constants.SEARCH_TIME_DELAY
 import myappnew.com.conserve.helper.EventObserver
 import myappnew.com.conserve.helper.Resource
@@ -48,7 +49,7 @@ class HomeFragment :Fragment(R.layout.home_fragment) {
     private  val TAG = "HomeFragment"
 
     val viewMode:HomeViewModel by viewModels()
-    private val createNoteViewModel : CreateNoteViewModel by activityViewModels()
+   // private val createNoteViewModel : CreateNoteViewModel by activityViewModels()
 
     @Inject
    lateinit var noteAdapter : NoteAdapter
@@ -57,7 +58,6 @@ class HomeFragment :Fragment(R.layout.home_fragment) {
         super.onViewCreated(view , savedInstanceState)
 
         add_note_main.setOnClickListener {
-
             val action =HomeFragmentDirections.actionHomeFragmentToCreateNoteFragment()
             findNavController().navigate(action)
         }
@@ -116,8 +116,9 @@ class HomeFragment :Fragment(R.layout.home_fragment) {
         //  findNavController().navigate(R.id.addUrlDialog)
         AddUrlDialogs().apply {
             setPositiveAddUrlListener { url ,dialoge->
-                createNoteViewModel.setWebLink(Resource.Success(url),dialoge)
-                val action = HomeFragmentDirections.actionHomeFragmentToCreateNoteFragment()
+                dialoge?.dismiss()
+                val note=Note(null,"","","",webLink= url)
+                val action =HomeFragmentDirections.actionHomeFragmentToCreateNoteFragment(note)
                 findNavController().navigate(action)
             }
         }.show(childFragmentManager, null)
@@ -181,8 +182,9 @@ class HomeFragment :Fragment(R.layout.home_fragment) {
                 if (resultCode == Activity.RESULT_OK) {
                     val imageUri = result.uri
                     //  createNoteViewModel.setCurImageUri( Resource.Success(imageUri))
-                    createNoteViewModel.setCurImageUri(imageUri)
-                    val action =HomeFragmentDirections.actionHomeFragmentToCreateNoteFragment()
+                 //   createNoteViewModel.setCurImageUri(imageUri)
+                    val note=Note(null,"","","",imagePath = imageUri.toString())
+                    val action =HomeFragmentDirections.actionHomeFragmentToCreateNoteFragment(note)
                     findNavController().navigate(action)
                 }
             }
@@ -203,7 +205,7 @@ class HomeFragment :Fragment(R.layout.home_fragment) {
                 ic_progress_notes.isVisible=false
             }
         ){notes->
-
+           ln_empty.isVisible=notes.isEmpty()
             ic_progress_notes.isVisible=false
             noteAdapter.notes=notes
             Log.i(TAG , "subscribeToObservers: $notes")
