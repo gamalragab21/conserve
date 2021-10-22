@@ -5,17 +5,18 @@ Note App used to save your notes as text , images and urls by beautifil desgin
 
 <img src="https://user-images.githubusercontent.com/67482991/138484427-d1e11665-b108-4fc9-8299-79cfd0f6cc58.png" width="200">&nbsp;
 <img src="https://user-images.githubusercontent.com/67482991/138484433-a1166a2f-a0ab-4592-90ff-e3b634693238.png" width="200">&nbsp;
-<img src="(https://user-images.githubusercontent.com/67482991/138246410-0532b286-51ed-46e2-a6c5-59862bd1b991.png" width="200">&nbsp;
-<img src="https://user-images.githubusercontent.com/67482991/138246421-0c878c35-a788-419e-a3a5-71269aacacd9.png" width="200">&nbsp;
-<img src="https://user-images.githubusercontent.com/67482991/138246425-ef744a8c-d3cd-4a8d-a82d-574d72954121.png" width="200">&nbsp;
-<img src="https://user-images.githubusercontent.com/67482991/138246439-8d18f195-2bc7-42af-9301-605bf8704eb8.png" width="200">&nbsp;
-<img src="https://user-images.githubusercontent.com/67482991/138246450-9679cc2c-1071-47bd-90fa-696b4c118103.png" width="200">&nbsp;
-<img src="https://user-images.githubusercontent.com/67482991/138246484-41ae6f34-35ea-4061-836a-4df4b20a8657.png" width="200">&nbsp;
-<img src="https://user-images.githubusercontent.com/67482991/138246498-147e176a-a6cb-4e95-b9d5-f5c605e0c6fb.png" width="200">&nbsp;
-<img src="https://user-images.githubusercontent.com/67482991/138246510-a70a1227-7df6-4335-91c6-84fcfe251818.png" width="200">&nbsp;
-<img src="https://user-images.githubusercontent.com/67482991/138246529-02b9e93b-64ff-42bd-a3af-4e9545fb636a.png" width="200">&nbsp;
-<img src="https://user-images.githubusercontent.com/67482991/138246545-f373cb38-a089-4ccd-b248-6b7e14d2ef93.png" width="200">&nbsp;
-<img src="https://user-images.githubusercontent.com/67482991/138246556-596a09cf-246a-4279-a831-49fb99a412fc.png" width="200">&nbsp;
+<img src="https://user-images.githubusercontent.com/67482991/138484447-bb1e2be3-cd4a-4f67-9faf-ee29d137658a.png" width="200">&nbsp;
+<img src="https://user-images.githubusercontent.com/67482991/138484454-380cba15-81af-4f89-bc80-47de8baf0490.png" width="200">&nbsp;
+<img src="https://user-images.githubusercontent.com/67482991/138484499-4b702092-a0a5-4b1c-88f7-5d11ab808f21.png" width="200">&nbsp;
+<img src="https://user-images.githubusercontent.com/67482991/138484510-5e97d72c-29cf-433c-ac2c-77b668646a79.png" width="200">&nbsp;
+<img src="https://user-images.githubusercontent.com/67482991/138484529-5a220123-8469-48f7-8394-7f096311f288.png" width="200">&nbsp;
+<img src="https://user-images.githubusercontent.com/67482991/138484547-0b3f830c-e48a-4710-a3c1-bee03bd28c54.png" width="200">&nbsp;
+<img src="https://user-images.githubusercontent.com/67482991/138484597-1187ee80-64c2-4680-b8bc-e5988c6540f2.png" width="200">&nbsp;
+<img src="https://user-images.githubusercontent.com/67482991/138484584-977e03e9-2d1f-4ba9-9997-5c7f9e5a5bbe.png" width="200">&nbsp;
+<img src="https://user-images.githubusercontent.com/67482991/138484607-eb0c3755-bb02-4380-b3b8-07bced75393b.png" width="200">&nbsp;
+<img src="https://user-images.githubusercontent.com/67482991/138484615-c1d9b01f-ead6-463b-aa73-7642048b9c1c.png" width="200">&nbsp;
+<img src="https://user-images.githubusercontent.com/67482991/138484625-4a20c8cf-894d-42e7-b588-ddd38cd15da2.png" width="200">&nbsp;
+<img src="https://user-images.githubusercontent.com/67482991/138484630-3f05a005-27c3-47b2-ad87-1af64d3ff6f1.png" width="200">&nbsp;
 ## Built With
 
 * [Kotlin](https://kotlinlang.org) - As a programming language.
