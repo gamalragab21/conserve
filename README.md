@@ -1,7 +1,4 @@
 # conserve
-Not App with kotlin using tecnologies like 
-Dagger hilt 
- Mvvm by clean architure
- Room DB
- kotlin coroutines
+Note App used to save your notes as text , images and urls by beautifil desgin
+
  
