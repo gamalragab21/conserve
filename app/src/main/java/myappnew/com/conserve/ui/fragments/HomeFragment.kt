@@ -69,7 +69,7 @@ class HomeFragment : Fragment(R.layout.home_fragment) {
                 requireActivity()?.finish()
             }
         }
-        requireActivity().onBackPressedDispatcher.addCallback(this,callBack)
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner,callBack)
 
         add_note_main.setOnClickListener {
             val action = HomeFragmentDirections.actionHomeFragmentToCreateNoteFragment()
