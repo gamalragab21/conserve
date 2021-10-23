@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -50,7 +49,7 @@ class HomeViewModel
         }
     }
 
-    fun delete(note : Note) {
+    fun delete(note : Int) {
         _listNoteStatus.postValue(Event(Resource.Loading()))
 
         viewModelScope.launch(dispatcher) {

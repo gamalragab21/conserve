@@ -10,23 +10,23 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 @Entity(tableName = "notes")
 class Note(
-    @PrimaryKey(autoGenerate = true )
-     val  id:Int?=null,
     @ColumnInfo(name = "title")
     val title:String,
     @ColumnInfo(name = "date_time")
     val dateTime:String,
     @ColumnInfo(name = "subtitle")
-    val subTitle:String,
+    val subTitle:String?,
     @ColumnInfo(name = "image_path")
-    val imagePath:String?=null,
+    val imagePath:String?,
     @ColumnInfo(name = "note_text")
-    var note_text: String? = null,
+    var note_text: String,
     @ColumnInfo(name = "color")
-    val color:String?=null,
+    val color:String?,
     @ColumnInfo(name = "weblink")
-    val webLink:String?=null
+    val webLink:String?
 ):Parcelable{
+    @PrimaryKey(autoGenerate = true )
+    var  id:Int?=null
     override fun toString() : String {
         return "Note(id=$id, title='$title', dateTime='$dateTime', subTitle='$subTitle', imagePath=$imagePath, color=$color, webLink=$webLink)"
     }

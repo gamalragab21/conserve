@@ -1,6 +1,5 @@
 package myappnew.com.conserve.repositories
 
-import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import myappnew.com.conserve.data.NoteDao
@@ -33,9 +32,9 @@ class DefaultHomeRepository @Inject constructor(
         }
     }
 
-    suspend fun delete(note : Note):Resource<Int> = withContext(Dispatchers.IO) {
+    suspend fun delete(id: Int):Resource<Int> = withContext(Dispatchers.IO) {
         safeCall {
-            val noteDeleted:Int=noteDao.delete(note)
+            val noteDeleted:Int=noteDao.delete(id)
           Resource.Success(noteDeleted)
         }
     }

@@ -2,6 +2,7 @@ package myappnew.com.conserve.ui.activites
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import dagger.hilt.android.AndroidEntryPoint
 import myappnew.com.conserve.R
 
@@ -12,6 +13,13 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-
     }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+    }
+
+
+
+
 }

@@ -111,6 +111,7 @@ class CreateNoteViewModel @Inject constructor(
 
     }
 
+
     fun saveNote(inputTitle : EditText? , inputSubtitle : EditText? , input_note : EditText) {
         when {
             inputTitle?.text.toString().trim().isEmpty() -> {
@@ -176,7 +177,7 @@ class CreateNoteViewModel @Inject constructor(
     }
 
     fun updateNote(
-        id : Int? ,
+        id:Int,
         inputTitle : EditText? ,
         inputSubtitle : EditText? ,
         input_note : EditText
@@ -227,7 +228,6 @@ class CreateNoteViewModel @Inject constructor(
                 _updateNoteStatus.postValue(Event(Resource.Loading()))
                 viewModelScope.launch(dispatcher) {
                     val note = Note(
-                        id,
                         title = inputTitle?.text.toString() ,
                         dateTime = timeStatus.value?.peekContent()?.data.toString() ,
                         subTitle = inputSubtitle?.text.toString() ,
@@ -238,6 +238,8 @@ class CreateNoteViewModel @Inject constructor(
                         note_text = input_note.text.toString()
                     )
 
+                    note.id=id
+
                     val result = repository.update(note)
                     _updateNoteStatus.postValue(Event(result))
                 }
@@ -245,7 +247,7 @@ class CreateNoteViewModel @Inject constructor(
         }
     }
 
-    fun delete(note : Note?) {
+    fun delete(note: Int) {
         _deleteNoteStatus.postValue(Event(Resource.Loading()))
         viewModelScope.launch(dispatcher) {
         note?.let {

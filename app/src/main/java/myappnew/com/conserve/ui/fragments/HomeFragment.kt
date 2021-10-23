@@ -9,6 +9,7 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.activity.OnBackPressedCallback
 import androidx.annotation.RequiresApi
 import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
@@ -37,6 +38,7 @@ import myappnew.com.conserve.entiteis.Note
 import myappnew.com.conserve.helper.Constants.SEARCH_TIME_DELAY
 import myappnew.com.conserve.helper.EventObserver
 import myappnew.com.conserve.helper.Resource
+import myappnew.com.conserve.ui.activites.MainActivity
 import myappnew.com.conserve.ui.adapters.NoteAdapter
 import myappnew.com.conserve.ui.dialogs.AddUrlDialogs
 import myappnew.com.conserve.ui.viewmodels.CreateNoteViewModel
@@ -45,24 +47,36 @@ import myappnew.com.conserve.utils.snackbar
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class HomeFragment :Fragment(R.layout.home_fragment) {
-    private  val TAG = "HomeFragment"
+class HomeFragment : Fragment(R.layout.home_fragment) {
+    private val TAG = "HomeFragment"
 
-    val viewMode:HomeViewModel by viewModels()
-   // private val createNoteViewModel : CreateNoteViewModel by activityViewModels()
+
+
+
+    val viewMode: HomeViewModel by viewModels()
+    // private val createNoteViewModel : CreateNoteViewModel by activityViewModels()
 
     @Inject
-   lateinit var noteAdapter : NoteAdapter
+    lateinit var noteAdapter: NoteAdapter
 
-    override fun onViewCreated(view : View , savedInstanceState : Bundle?) {
-        super.onViewCreated(view , savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        // setup problem of back stack..
+
+        val callBack=object:OnBackPressedCallback(true){
+            override fun handleOnBackPressed() {
+                requireActivity()?.finish()
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(this,callBack)
 
         add_note_main.setOnClickListener {
-            val action =HomeFragmentDirections.actionHomeFragmentToCreateNoteFragment()
+            val action = HomeFragmentDirections.actionHomeFragmentToCreateNoteFragment()
             findNavController().navigate(action)
         }
 
-        var job : Job? = null
+        var job: Job? = null
         searchNote.addTextChangedListener { editable ->
             job?.cancel()
             job = lifecycleScope.launch {
@@ -70,35 +84,39 @@ class HomeFragment :Fragment(R.layout.home_fragment) {
                 editable?.let {
                     if (it.isEmpty()) {
                         viewMode.getAllNotes()
-                    }else viewMode.searchUser(it.toString())
-               }
-           }
+                    } else viewMode.searchUser(it.toString())
+                }
+            }
         }
 
         subscribeToObservers()
         setupRecyclerView()
 
-        noteAdapter.setOnDeleteClickListener {note->
+        noteAdapter.setOnDeleteClickListener { note ->
 
-            viewMode.delete(note)
+            note.id?.let {
+                viewMode.delete(it)
+
+            }
         }
 
-        noteAdapter.setOnNoteClickListener {note->
+        noteAdapter.setOnNoteClickListener { note ->
 
-           val action =HomeFragmentDirections.actionHomeFragmentToCreateNoteFragment(note)
+            val action = HomeFragmentDirections.actionHomeFragmentToCreateNoteFragment(note)
             findNavController().navigate(action)
         }
         quickActions()
 
 
     }
+
     private fun quickActions() {
 
         ic_add_note.setOnClickListener {
 
             val action = HomeFragmentDirections.actionHomeFragmentToCreateNoteFragment()
-              findNavController().navigate(action)
-                 }
+            findNavController().navigate(action)
+        }
 
         ic_add_image.setOnClickListener {
 
@@ -115,10 +133,16 @@ class HomeFragment :Fragment(R.layout.home_fragment) {
     private fun dialogAddUrl() {
         //  findNavController().navigate(R.id.addUrlDialog)
         AddUrlDialogs().apply {
-            setPositiveAddUrlListener { url ,dialoge->
-                dialoge?.dismiss()
-                val note=Note(null,"","","",webLink= url)
-                val action =HomeFragmentDirections.actionHomeFragmentToCreateNoteFragment(note)
+            setPositiveAddUrlListener { url, dialoge ->
+                val note = Note(
+                    "",
+                    "",
+                    "",
+                    "",
+                    webLink = url, color = "#000000",
+                    note_text = ""
+                )
+                val action = HomeFragmentDirections.actionHomeFragmentToCreateNoteFragment(note)
                 findNavController().navigate(action)
             }
         }.show(childFragmentManager, null)
@@ -129,17 +153,17 @@ class HomeFragment :Fragment(R.layout.home_fragment) {
             .withPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
             .withListener(object : PermissionListener {
                 @RequiresApi(Build.VERSION_CODES.LOLLIPOP_MR1)
-                override fun onPermissionGranted(response : PermissionGrantedResponse?) { /* ... */
+                override fun onPermissionGranted(response: PermissionGrantedResponse?) { /* ... */
                     openGallery()
                 }
 
-                override fun onPermissionDenied(response : PermissionDeniedResponse?) { /* ... */
+                override fun onPermissionDenied(response: PermissionDeniedResponse?) { /* ... */
                     snackbar(getString(R.string.denied_message))
                 }
 
                 override fun onPermissionRationaleShouldBeShown(
-                    p0 : com.karumi.dexter.listener.PermissionRequest? ,
-                    p1 : PermissionToken?
+                    p0: com.karumi.dexter.listener.PermissionRequest?,
+                    p1: PermissionToken?
                 ) {
                     p1?.let {
                         it.continuePermissionRequest()
@@ -152,28 +176,28 @@ class HomeFragment :Fragment(R.layout.home_fragment) {
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP_MR1)
     private fun openGallery() {
-        CropImage.startPickImageActivity(requireContext() , this@HomeFragment)
+        CropImage.startPickImageActivity(requireContext(), this@HomeFragment)
     }
 
-    fun cropImage(uri : Uri?) {
+    fun cropImage(uri: Uri?) {
         uri?.let { myuri ->
             CropImage.activity(uri)
                 .setCropShape(CropImageView.CropShape.RECTANGLE)
                 .setMultiTouchEnabled(true)
                 .setGuidelines(CropImageView.Guidelines.ON)
-                .start(requireContext() , this)
+                .start(requireContext(), this)
         }
 
     }
 
     @SuppressLint("CheckResult")
-    override fun onActivityResult(requestCode : Int , resultCode : Int , data : Intent?) {
-        super.onActivityResult(requestCode , resultCode , data)
-        Log.i("here" , "onActivityResult: ")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        Log.i("here", "onActivityResult: ")
         when (requestCode) {
             CropImage.PICK_IMAGE_CHOOSER_REQUEST_CODE -> {
                 if (resultCode == Activity.RESULT_OK) {
-                    val uri = CropImage.getPickImageResultUri(requireContext() , data)
+                    val uri = CropImage.getPickImageResultUri(requireContext(), data)
                     cropImage(uri)
                 }
             }
@@ -182,9 +206,19 @@ class HomeFragment :Fragment(R.layout.home_fragment) {
                 if (resultCode == Activity.RESULT_OK) {
                     val imageUri = result.uri
                     //  createNoteViewModel.setCurImageUri( Resource.Success(imageUri))
-                 //   createNoteViewModel.setCurImageUri(imageUri)
-                    val note=Note(null,"","","",imagePath = imageUri.toString())
-                    val action =HomeFragmentDirections.actionHomeFragmentToCreateNoteFragment(note)
+                    //   createNoteViewModel.setCurImageUri(imageUri)
+                    val note = Note(
+                        "",
+                        "",
+                        "",
+                         imageUri.toString(),
+                        "",
+                        color = "#000000",
+                        ""
+                    )
+
+
+                    val action = HomeFragmentDirections.actionHomeFragmentToCreateNoteFragment(note)
                     findNavController().navigate(action)
                 }
             }
@@ -195,43 +229,43 @@ class HomeFragment :Fragment(R.layout.home_fragment) {
 
     private fun subscribeToObservers() {
 
-        viewMode.listNoteStatus.observe(viewLifecycleOwner,EventObserver(
+        viewMode.listNoteStatus.observe(viewLifecycleOwner, EventObserver(
             onLoading = {
-                ic_progress_notes.isVisible=true
+                ic_progress_notes.isVisible = true
 
             },
             onError = {
                 snackbar(it)
-                ic_progress_notes.isVisible=false
+                ic_progress_notes.isVisible = false
             }
-        ){notes->
-           ln_empty.isVisible=notes.isEmpty()
-            ic_progress_notes.isVisible=false
-            noteAdapter.notes=notes
-            Log.i(TAG , "subscribeToObservers: $notes")
+        ) { notes ->
+            ln_empty.isVisible = notes.isEmpty()
+            ic_progress_notes.isVisible = false
+            noteAdapter.notes = notes
+            Log.i(TAG, "subscribeToObservers: $notes")
         })
 
-        viewMode.deleteNoteStatus.observe(viewLifecycleOwner,EventObserver(
+        viewMode.deleteNoteStatus.observe(viewLifecycleOwner, EventObserver(
             onLoading = {
-                ic_progress_notes.isVisible=true
+                ic_progress_notes.isVisible = true
             },
             onError = {
                 snackbar(it)
-                ic_progress_notes.isVisible=false
+                ic_progress_notes.isVisible = false
             }
-        ){coulm->
-            ic_progress_notes.isVisible=false
+        ) { coulm ->
+            ic_progress_notes.isVisible = false
+            if (coulm > 0) snackbar(getString(R.string.delete_note_success))
             noteAdapter.notifyDataSetChanged()
-            if (coulm>0) snackbar(getString(R.string.delete_note_success))
-            viewMode.getAllNotes()
+            //viewMode.getAllNotes()
 
         })
 
-        viewMode.searchResults.observe(viewLifecycleOwner , EventObserver(
+        viewMode.searchResults.observe(viewLifecycleOwner, EventObserver(
             onError = {
                 ic_progress_notes.isVisible = false
                 snackbar(it)
-            } ,
+            },
             onLoading = {
                 ic_progress_notes.isVisible = true
             }
@@ -243,15 +277,13 @@ class HomeFragment :Fragment(R.layout.home_fragment) {
         })
 
 
-
-
-
     }
-    private fun setupRecyclerView() =rvListNote.apply {
-        itemAnimator=null
+
+    private fun setupRecyclerView() = rvListNote.apply {
+        itemAnimator = null
         isNestedScrollingEnabled = false
         layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-        adapter=noteAdapter
+        adapter = noteAdapter
 
     }
 }

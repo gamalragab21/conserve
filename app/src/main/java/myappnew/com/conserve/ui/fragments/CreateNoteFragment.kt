@@ -19,7 +19,6 @@ import android.widget.LinearLayout
 import androidx.annotation.RequiresApi
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -38,7 +37,6 @@ import kotlinx.android.synthetic.main.item_container_note.*
 import kotlinx.android.synthetic.main.layout_dialog_add_url.*
 import kotlinx.android.synthetic.main.layout_persistent_bottom_sheet.*
 import myappnew.com.conserve.R
-import myappnew.com.conserve.entiteis.Note
 import myappnew.com.conserve.helper.EventObserver
 import myappnew.com.conserve.helper.Resource
 import myappnew.com.conserve.ui.dialogs.AddUrlDialogs
@@ -64,23 +62,27 @@ class CreateNoteFragment : Fragment(R.layout.fragment_create_note) {
 
 
     private val args:CreateNoteFragmentArgs by navArgs()
-    private var note:Note?=null
+//    private var note:Note?=null
 
+    private var isUpdate=false
+
+     private var idOfNoteUpdated: Int?=null
 
     override fun onViewCreated(view : View , savedInstanceState : Bundle?) {
         super.onViewCreated(view , savedInstanceState)
 
        args.note?.let { noteUpdate ->
-           note=noteUpdate
-           input_title.setText(note?.title)
-           text_data_time.text = note?.dateTime
-           input_subTitle.setText(note?.subTitle)
-           input_note.setText(note?.note_text)
+           isUpdate=true
+           idOfNoteUpdated=noteUpdate.id
+          // note=noteUpdate
+           input_title.setText(noteUpdate.title)
+           text_data_time.text = noteUpdate.dateTime
+           input_subTitle.setText(noteUpdate.subTitle)
+           input_note.setText(noteUpdate.note_text)
       //     glide.load(note?.imagePath).into(imageNote)
           // textUrl.text = note?.webLink
            setNoteColorIndicator()
            noteUpdate.webLink?.let {url->
-               Log.i(TAG , "onViewCreated: $url")
                createNoteViewModel.setWebLink(Resource.Success(url),null)
            }
            noteUpdate.imagePath?.let {uri->
@@ -89,7 +91,6 @@ class CreateNoteFragment : Fragment(R.layout.fragment_create_note) {
 
            noteUpdate.color?.let {color->
                 selecteColorNote=color
-            //    createNoteViewModel.setColorIndicatorStatus(selecteColorNote)
             }
        }
 
@@ -109,13 +110,12 @@ class CreateNoteFragment : Fragment(R.layout.fragment_create_note) {
 
         ic_save.setOnClickListener {
             it.hideKeyboard()
-            Log.i(TAG , "onViewCreated: ic_save")
-          if ( note?.id == null) {
-              Log.i(TAG , "onViewCreated:  note?.id == null")
+          if (!isUpdate) {
               createNoteViewModel.saveNote(input_title , input_subTitle,input_note)
           } else {
-              Log.i(TAG , "onViewCreated: else")
-              createNoteViewModel.updateNote(note?.id,input_title , input_subTitle,input_note)
+              idOfNoteUpdated?.let {
+                  createNoteViewModel.updateNote(it,input_title , input_subTitle,input_note)
+              }
             }
 
         }
@@ -137,7 +137,7 @@ class CreateNoteFragment : Fragment(R.layout.fragment_create_note) {
         ) { time_data ->
             ic_progress_create_note.isVisible = false
             text_data_time.apply {
-                if (note==null)   text = time_data
+                if (!isUpdate)   text = time_data
             }
         })
         // for color indicator
@@ -253,7 +253,7 @@ class CreateNoteFragment : Fragment(R.layout.fragment_create_note) {
             BottomSheetBehavior.BottomSheetCallback() {
             override fun onStateChanged(bottomSheet : View , newState : Int) {
                 if (newState == BottomSheetBehavior.STATE_EXPANDED) {
-                    delete_note.isVisible = note?.id != null
+                    delete_note.isVisible = idOfNoteUpdated != null
                     setNoteColorIndicator()
                     bottomSheet.hideKeyboard()
                 }
@@ -281,7 +281,10 @@ class CreateNoteFragment : Fragment(R.layout.fragment_create_note) {
     }
 
     private fun dialogDeleteNote() {
-       createNoteViewModel.delete(note)
+        idOfNoteUpdated?.let {
+            createNoteViewModel.delete(it)
+
+        }
     }
 
     private fun copyTextNote() {
